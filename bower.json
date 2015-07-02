@@ -1,9 +1,9 @@
 {
   "name": "pages",
   "version": "0.0.1",
-  "homepage": "https://github.com/IAmEddieDean/IAmEddieDean.github.io",
+  "homepage": "https://github.com/google",
   "authors": [
-    "Chris Oyler <christopher.oyler@gmail.com>"
+    "Me"
   ],
   "description": "pages example",
   "main": "index.html",
