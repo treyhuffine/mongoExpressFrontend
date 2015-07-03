@@ -9,10 +9,16 @@ angular.module('askNerds', [])
     },
     postQuestion: function(newQuestion) {
       return $http.post(ATN.API_URL + "/questions", newQuestion);
+    },
+    viewQuestion: function(question) {
+      return $http.get(ATN.API_URL + "/question/" + question.slug);
     }
   };
 })
-.controller('MainCtrl', function($scope, $http, Question){
+.controller('MainCtrl', function($scope, $http, $location, Question){
+  $scope.questions = {};
+  $scope.focusQuestion = {};
+  $scope.singleView = false;
   Question.getQuestions()
     .success(function(data) {
       $scope.questions = data;
@@ -29,5 +35,21 @@ angular.module('askNerds', [])
       .catch(function(error) {
         console.error(error);
       });
+  };
+  $scope.viewQuestion = function(question) {
+    Question.viewQuestion(question)
+      .success(function(data) {
+        $scope.focusQuestion = data;
+        $scope.singleView = true;
+        $location.url("/" + $scope.focusQuestion.slug);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
+  $scope.backToMain = function() {
+    $scope.singleView = false;
+    $scope.focusQuestion = {};
+    $location.url("/");
   };
 });
