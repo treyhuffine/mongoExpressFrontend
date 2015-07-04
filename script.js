@@ -130,7 +130,7 @@ angular.module('questions', ['ui.router', 'firebase'])
     });
   };
 })
-.controller('QuestionCtrl', function($scope, Question, $state){
+.controller('QuestionCtrl', function($scope, Question, $state, $rootScope){
   $scope.slug = $state.params.slug;
 
   Question.getOne($state.params.slug)
@@ -140,6 +140,14 @@ angular.module('questions', ['ui.router', 'firebase'])
       console.error(err);
       $state.go('404');
   });
+  $scope.isUser = function(question) {
+    if ($rootScope.currentUser) {
+      return question.email === $rootScope.currentUser.email;
+    }
+    else {
+      return false;
+    }
+  };
   $scope.deleteQuestion = function(delQ) {
     console.log(delQ.slug);
     Question.deleteQuestion(delQ.slug)
@@ -149,15 +157,22 @@ angular.module('questions', ['ui.router', 'firebase'])
       .catch(function(err) {
         console.error(err);
       });
-  };  
+  };
 })
-.controller('MainCtrl', function($scope, Question){
-  console.log('main');
+.controller('MainCtrl', function($scope, Question, $rootScope){
   Question.getAll().success(function(data) {
     $scope.questions = data;
   }).catch(function(err) {
     console.error(err);
   });
+  $scope.isUser = function(question) {
+    if ($rootScope.currentUser) {
+      return question.email === $rootScope.currentUser.email;
+    }
+    else {
+      return false;
+    }
+  };
   $scope.editQuestion = function() {};
   $scope.deleteQuestion = function(delQ) {
     console.log(delQ.slug);
