@@ -47,40 +47,16 @@
 <br>
 
 <div class="boxes">
-  <div class="media">
+  <div class="media" ng-repeat="answer in answers">
     <div class="media-left">
       <a href="#">
         <img class="media-object" ng-src="....">
       </a>
     </div>
     <div class="media-body">
-      <h4 class="media-heading">email answered:</h4>
+      <h4 class="media-heading">{{answer.email}} answered:</h4>
       <div class="time hidden-xs">time....</div>
-      <div>answer body </div>
-    </div>
-  </div>
-  <div class="media">
-    <div class="media-left">
-      <a href="#">
-        <img class="media-object" ng-src="....">
-      </a>
-    </div>
-    <div class="media-body">
-      <h4 class="media-heading">email answered:</h4>
-      <div class="time hidden-xs">time....</div>
-      <div>answer body </div>
-    </div>
-  </div>
-  <div class="media">
-    <div class="media-left">
-      <a href="#">
-        <img class="media-object" ng-src="....">
-      </a>
-    </div>
-    <div class="media-body">
-      <h4 class="media-heading">email answered:</h4>
-      <div class="time hidden-xs">time....</div>
-      <div>answer body </div>
+      <div>{{answer.body}}</div>
     </div>
   </div>
 </div>

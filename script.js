@@ -54,6 +54,18 @@ angular.module('questions', ['ui.router', 'firebase'])
     }
   };
 })
+.factory('Answer', function($http, ATN) {
+  return {
+    answers: [],
+    getAll: function() {
+      return this.answers;
+    },
+    addAnswer: function(newAnswer) {
+      // return $http.post(ATN.API_URL + "/questions", newQuestion);
+      this.answers.push(newAnswer);
+    }
+  };
+})
 .filter("dateInWords", function() {
   return function(input) {
     return moment(input).utc().fromNow();
@@ -130,9 +142,9 @@ angular.module('questions', ['ui.router', 'firebase'])
     });
   };
 })
-.controller('QuestionCtrl', function($scope, Question, $state, $rootScope){
+.controller('QuestionCtrl', function($scope, Question, Answer, $state, $rootScope){
   $scope.slug = $state.params.slug;
-  $scope.answers = [];
+  $scope.answers = Answer.getAll();
   Question.getOne($state.params.slug)
     .success(function(data) {
       $scope.question = data;
@@ -142,10 +154,10 @@ angular.module('questions', ['ui.router', 'firebase'])
   });
   $scope.addAnswer = function() {
     Answer.addAnswer($scope.answer);
-    $scope.answers.push(answer);
+    $scope.answer = {};
   };
   $scope.isUser = function(question) {
-    if ($rootScope.currentUser) {
+    if ($rootScope.currentUser && question) {
       return question.email === $rootScope.currentUser.email;
     }
     else {
