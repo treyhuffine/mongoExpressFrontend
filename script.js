@@ -48,8 +48,6 @@ angular.module('questions', ['ui.router'])
   $scope.askQuestion = function() {
     Question.addQuestion($scope.question)
       .success(function(data) {
-        $scope.questions.unshift(data);
-        $scope.question = {};
         $state.go("home");
       })
       .catch(function(err) {
