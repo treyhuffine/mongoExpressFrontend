@@ -58,11 +58,14 @@ angular.module('questions', ['ui.router', 'firebase'])
   };
 })
 .controller('LoginCtrl', function($scope, $rootScope) {
+  $scope.loggedIn = false;
   var $checkAuth = $rootScope.afAuth.$onAuth(function(authData) {
     if (authData) {
       console.log(authData);
       $rootScope.currentUser = {};
+      $scope.loggedIn = true;
       $rootScope.currentUser.userToken = authData.uid;
+      $rootScope.currentUser.email = authData.password.email;
     }
   });
   $checkAuth();
@@ -88,17 +91,6 @@ angular.module('questions', ['ui.router', 'firebase'])
         alert("Register Successful - Please login");
       }
     })
-    .then(function(currentData) {
-      var newData;
-      newData = currentData;
-      if (newData.uid) {
-        $rootScope.fbRef.child("users").child(newData.uid).set({
-          email: $scope.user.email
-        });
-        return true;
-      }
-      return false;
-    })
     .then(function(userData) {
       $("#signup-modal").modal("hide");
       console.log("create", userData);
@@ -109,20 +101,29 @@ angular.module('questions', ['ui.router', 'firebase'])
   };
   $scope.loginUser = function() {
     console.log("login");
-    $("#signup-modal").modal("hide");
     $rootScope.afAuth.$authWithPassword({
       email: $scope.user.email,
       password: $scope.user.password
-    })
-    .catch(function(error) {
-      alert(error);
+    }, function() {
+      $checkAuth();
+      $("#login-modal").modal("hide");
     });
+    $("#login-modal").modal("hide");
   };
   $scope.logout = function(){
+    $scope.loggedIn = false;
     $rootScope.afAuth.$unauth();
   };
 })
-.controller('AskCtrl', function($scope, Question, $state) {
+.controller('AskCtrl', function($scope, $rootScope, Question, $state) {
+  if ($rootScope.currentUser && $rootScope.currentUser.length > 1 ) {
+    $rootScope.fbRef.child("users").child($rootScope.currentUser.userToken).on("value", function(snap) {
+      console.log(snap.val().email);
+      if ($scope.question.email && snap.val().email) {
+        $scope.question.email = snap.val().email;
+      }
+    });
+  }
   $scope.askQuestion = function() {
     Question.addQuestion($scope.question)
       .success(function(data) {
