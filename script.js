@@ -45,7 +45,17 @@ angular.module('questions', ['ui.router'])
   };
 })
 .controller('AskCtrl', function($scope, Question, $state) {
-
+  $scope.askQuestion = function() {
+    Question.addQuestion($scope.question)
+      .success(function(data) {
+        $scope.questions.unshift(data);
+        $scope.question = {};
+        $state.go("home");
+      })
+      .catch(function(err) {
+        console.error(err);
+      });
+  };
 })
 .controller('QuestionCtrl', function($scope, Question, $state){
   $scope.slug = $state.params.slug;
@@ -64,17 +74,4 @@ angular.module('questions', ['ui.router'])
   }).catch(function(err) {
     console.error(err);
   });
-
-  $scope.askQuestion = function() {
-    Question.addQuestion($scope.question)
-      .success(function(data) {
-        $scope.questions.unshift(data);
-        $scope.question = {};
-        $("#new-question-modal").modal("hide");
-      })
-      .catch(function(err) {
-        console.error(err);
-      });
-  };
-
 });
