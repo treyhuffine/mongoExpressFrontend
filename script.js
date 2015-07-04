@@ -59,14 +59,10 @@ angular.module('questions', ['ui.router', 'firebase'])
 })
 .controller('LoginCtrl', function($scope, $rootScope) {
   var $checkAuth = $rootScope.afAuth.$onAuth(function(authData) {
-    console.log(authData);
     if (authData) {
+      console.log(authData);
       $rootScope.currentUser = {};
       $rootScope.currentUser.userToken = authData.uid;
-      $rootScope.currentUser.email = $rootScope.fbRef.child("users").child($rootScope.currentUser.userToken.uid).email;
-      return true;
-    } else {
-      return false;
     }
   });
   $checkAuth();
@@ -112,6 +108,8 @@ angular.module('questions', ['ui.router', 'firebase'])
     });
   };
   $scope.loginUser = function() {
+    console.log("login");
+    $("#signup-modal").modal("hide");
     $rootScope.afAuth.$authWithPassword({
       email: $scope.user.email,
       password: $scope.user.password
@@ -120,7 +118,7 @@ angular.module('questions', ['ui.router', 'firebase'])
       alert(error);
     });
   };
-  $scope.logout = function() {
+  $scope.logout = function(){
     $rootScope.afAuth.$unauth();
   };
 })
