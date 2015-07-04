@@ -1,8 +1,19 @@
-angular.module('questions', ['ui.router'])
-.run()
+angular.module('questions', ['ui.router', 'firebase'])
 .constant("ATN", {
-  "API_URL": "http://localhost:3000"
+  "API_URL": "http://localhost:3000",
+  "FB_URL": "https://treyhuffine-sample-apps.firebaseio.com/ask-the-nerds"
   // "API_URL": "https://mongoexoress.herokuapp.com/"
+})
+.run(function($rootScope, $window, $firebaseAuth,ATN) {
+  $rootScope.fbRef = new $window.Firebase(ATN.FB_URL);
+  $rootScope.afAuth = $firebaseAuth($rootScope.fbRef);
+  // $rootScope.$on("$routeChangeError", function(event, next, previous, error) {
+  // // We can catch the error thrown when the $requireAuth promise is rejected
+  // // and redirect the user back to the home page
+  // if (error === "AUTH_REQUIRED") {
+  //     $location.path("/login");
+  //   }
+  // });
 })
 .config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise("/");
@@ -47,7 +58,8 @@ angular.module('questions', ['ui.router'])
   };
 })
 .controller('LoginCtrl', function($scope, $state) {
-
+  $scope.registerUser(function() {});
+  $scope.loginUser(function() {});
 })
 .controller('AskCtrl', function($scope, Question, $state) {
   $scope.askQuestion = function() {
