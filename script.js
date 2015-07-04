@@ -46,9 +46,11 @@ angular.module('questions', ['ui.router', 'firebase'])
     getAll: function() {
       return $http.get(ATN.API_URL + "/questions");
     },
-
     addQuestion: function(newQuestion) {
       return $http.post(ATN.API_URL + "/questions", newQuestion);
+    },
+    deleteQuestion: function(delQ) {
+      return $http.delete(ATN.API_URL + "/questions/" + delQ);
     }
   };
 })
@@ -137,7 +139,17 @@ angular.module('questions', ['ui.router', 'firebase'])
     }).catch(function(err) {
       console.error(err);
       $state.go('404');
-    });
+  });
+  $scope.deleteQuestion = function(delQ) {
+    console.log(delQ.slug);
+    Question.deleteQuestion(delQ.slug)
+      .success(function(data) {
+        console.log(data);
+      })
+      .catch(function(err) {
+        console.error(err);
+      });
+  };  
 })
 .controller('MainCtrl', function($scope, Question){
   console.log('main');
@@ -146,4 +158,15 @@ angular.module('questions', ['ui.router', 'firebase'])
   }).catch(function(err) {
     console.error(err);
   });
+  $scope.editQuestion = function() {};
+  $scope.deleteQuestion = function(delQ) {
+    console.log(delQ.slug);
+    Question.deleteQuestion(delQ.slug)
+      .success(function(data) {
+        console.log(data);
+      })
+      .catch(function(err) {
+        console.error(err);
+      });
+  };
 });
