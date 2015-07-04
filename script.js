@@ -10,6 +10,15 @@ angular.module('questions', ['ui.router'])
       templateUrl: "list.html",
       controller: 'MainCtrl'
     })
+    .state('404', {
+      url: '/404',
+      templateUrl: '404.html'
+    })
+    .state('new', {
+      url: "/new",
+      templateUrl: "ask.html",
+      controller: "AskCtrl"
+    })
     .state('question', {
       url: "/:slug",
       templateUrl: "question.html",
@@ -35,6 +44,9 @@ angular.module('questions', ['ui.router'])
     return moment(input).utc().fromNow();
   };
 })
+.controller('AskCtrl', function($scope, Question, $state) {
+
+})
 .controller('QuestionCtrl', function($scope, Question, $state){
   $scope.slug = $state.params.slug;
 
@@ -43,6 +55,7 @@ angular.module('questions', ['ui.router'])
       $scope.question = data;
     }).catch(function(err) {
       console.error(err);
+      $state.go('404');
     });
 })
 .controller('MainCtrl', function($scope, Question){
