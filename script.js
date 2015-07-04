@@ -176,12 +176,14 @@ angular.module('questions', ['ui.router', 'firebase'])
   $scope.editQuestion = function() {};
   $scope.deleteQuestion = function(delQ) {
     console.log(delQ.slug);
-    Question.deleteQuestion(delQ.slug)
-      .success(function(data) {
-        console.log(data);
-      })
-      .catch(function(err) {
-        console.error(err);
-      });
+    if ($scope.isUser(delQ)) {
+      Question.deleteQuestion(delQ.slug)
+        .success(function(data) {
+          console.log(data);
+        })
+        .catch(function(err) {
+          console.error(err);
+        });
+    }
   };
 });

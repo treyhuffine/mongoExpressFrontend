@@ -13,3 +13,21 @@
   </div>
     <div class="hidden-xs"><a ui-sref="home" class="btn btn-primary btn-lg pull-right">back</a></div>
 </div>
+
+<div class="boxes">
+  <div class="media">
+    <div class="media-left">
+      <a href="#">
+        <img class="media-object" ng-src="{{question.gravatarUrl}}">
+      </a>
+    </div>
+    <div class="media-body">
+      <div class="hidden-xs"><a class="btn btn-danger btn-xs pull-right" ng-show="isUser(question)" ng-click="deleteQuestion()">Delete</a></div>
+      <div class="hidden-xs"><a class="btn btn-warning btn-xs pull-right" ng-show="isUser(question)" ng-click="editQuestion()">Edit</a></div>
+      <h4 class="media-heading">{{question.email}} asked:</h4>
+      <div class="time hidden-xs">{{ question.createdAt | dateInWords }}</div>
+      <div>{{question.body}}</div>
+    </div>
+      <div class="hidden-xs"><a ui-sref="home" class="btn btn-primary btn-lg pull-right">back</a></div>
+  </div>
+</div>
