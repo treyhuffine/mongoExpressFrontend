@@ -1,0 +1,12 @@
+<div class="media">
+  <div class="media-left">
+    <a href="#">
+      <img class="media-object" ng-src="{{question.gravatarUrl}}">
+    </a>
+  </div>
+  <div class="media-body">
+    <h4 class="media-heading">{{question.email}} asked:</h4>
+    <div class="time hidden-xs">{{ question.createdAt | dateInWords }}</div>
+    <div>{{question.body}}</div>
+  </div>
+</div>

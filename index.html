@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="askNerds">
+<html lang="en" ng-app="questions">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ask the Nerds</title>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.4/readable/bootstrap.min.css">
+    <title>Heimdall</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.4/slate/bootstrap.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Handlee' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" href="/favicon.ico">
   </head>
@@ -29,47 +30,14 @@
               <li>
                 <div class="navbar-text"></div>
               </li>
-              <li><form><a href="#" class="btn btn-success navbar-btn btn-sm" data-toggle="modal" data-target="#new-question-modal">Ask Question</a></form></li>
+              <li><form><a href="#" class="btn btn-primary navbar-btn btn-sm" data-toggle="modal" data-target="#new-question-modal">Ask Question</a></form></li>
             </ul>
           </div>
         </div>
       </nav>
 
-    <div class="current-question" ng-show="singleView">
-      <div class="media-left">
-        <a href="">
-          <img class="media-object" ng-src="{{focusQuestion.gravatarUrl}}">
-        </a>
-      </div>
-      <div class="media-body">
-        <button ng-click="backToMain()"
-                class="btn btn-warning pull-right">Back</button>
-        <h4 class="media-heading">{{focusQuestion.email}} asked:</h4>
-        <div class="time hidden-xs">{{focusQuestion.createdAt | date : 'mediumDate'}}</div>
-        <div class="media-left"><h4>{{focusQuestion.body}}</h4></div>
-      </div>
-    </div>
-    <div ng-hide="singleView">
-      <div class="well">
-        <h4>Ask the Nerds</h4>
-        <p>This Q&amp;A site is dedicated to questions about programming</p>
-      </div>
+      <div ui-view></div>
 
-      <div class="boxes">
-        <div class="media" ng-repeat="question in questions">
-          <div class="media-left">
-            <a href="#">
-              <img class="media-object" ng-src="{{question.gravatarUrl}}">
-            </a>
-          </div>
-          <div class="media-body">
-            <h4 class="media-heading">{{question.email}} asked:</h4>
-            <div class="time hidden-xs">{{question.createdAt | date : 'mediumDate'}}</div>
-            <div>{{question.body}}</div>
-            <button class="btn btn-success btn-xs" ng-click="viewQuestion(question)">View Answers</button>
-          </div>
-        </div>
-      </div>
     </div>
 
     <div class="modal fade" id="new-question-modal" tabindex="-1">
@@ -79,7 +47,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">New Question</h4>
           </div>
-          <form class="form-horizontal" accept-charset="UTF-8" method="post" ng-submit="postQuestion()">
+          <form class="form-horizontal" accept-charset="UTF-8" method="post" ng-submit="askQuestion()">
             <div class="modal-body">
               <div class="form-group">
                 <label for="inputEmail" class="col-sm-2 control-label">Email</label>
@@ -102,11 +70,12 @@
         </div>
       </div>
     </div>
-  </div>
 
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
