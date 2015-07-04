@@ -59,7 +59,7 @@ angular.module('questions', ['ui.router', 'firebase'])
 })
 .controller('LoginCtrl', function($scope, $rootScope) {
   $scope.loggedIn = false;
-  var $checkAuth = $rootScope.afAuth.$onAuth(function(authData) {
+  $scope.$checkAuth = $rootScope.afAuth.$onAuth(function(authData) {
     if (authData) {
       console.log(authData);
       $rootScope.currentUser = {};
@@ -68,7 +68,7 @@ angular.module('questions', ['ui.router', 'firebase'])
       $rootScope.currentUser.email = authData.password.email;
     }
   });
-  $checkAuth();
+  $scope.$checkAuth
   $scope.registerUser = function() {
     console.log($scope.user);
     $rootScope.afAuth.$createUser({
@@ -116,22 +116,17 @@ angular.module('questions', ['ui.router', 'firebase'])
   };
 })
 .controller('AskCtrl', function($scope, $rootScope, Question, $state) {
-  if ($rootScope.currentUser && $rootScope.currentUser.length > 1 ) {
-    $rootScope.fbRef.child("users").child($rootScope.currentUser.userToken).on("value", function(snap) {
-      console.log(snap.val().email);
-      if ($scope.question.email && snap.val().email) {
-        $scope.question.email = snap.val().email;
-      }
-    });
-  }
   $scope.askQuestion = function() {
-    Question.addQuestion($scope.question)
-      .success(function(data) {
-        $state.go("home");
-      })
-      .catch(function(err) {
-        console.error(err);
-      });
+    Question.addQuestion({
+      email: $rootScope.currentUser.email,
+      body: $scope.body,
+      uid: $rootScope.currentUser.userToken})
+    .success(function(data) {
+      $state.go("home");
+    })
+    .catch(function(err) {
+      console.error(err);
+    });
   };
 })
 .controller('QuestionCtrl', function($scope, Question, $state){
