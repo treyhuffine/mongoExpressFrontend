@@ -132,7 +132,7 @@ angular.module('questions', ['ui.router', 'firebase'])
 })
 .controller('QuestionCtrl', function($scope, Question, $state, $rootScope){
   $scope.slug = $state.params.slug;
-
+  $scope.answers = [];
   Question.getOne($state.params.slug)
     .success(function(data) {
       $scope.question = data;
@@ -140,6 +140,10 @@ angular.module('questions', ['ui.router', 'firebase'])
       console.error(err);
       $state.go('404');
   });
+  $scope.addAnswer = function() {
+    Answer.addAnswer($scope.answer);
+    $scope.answers.push(answer);
+  };
   $scope.isUser = function(question) {
     if ($rootScope.currentUser) {
       return question.email === $rootScope.currentUser.email;
