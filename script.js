@@ -55,14 +55,15 @@ angular.module('questions', ['ui.router', 'firebase'])
   };
 })
 .factory('Answer', function($http, ATN) {
+  var answers = {};
   return {
-    answers: [],
-    getAll: function() {
-      return this.answers;
+    getAll: function(slug) {
+      answers[slug] = answers[slug] || [];
+      return answers[slug];
     },
-    addAnswer: function(newAnswer) {
+    addAnswer: function(newAnswer, slug) {
       // return $http.post(ATN.API_URL + "/questions", newQuestion);
-      this.answers.push(newAnswer);
+      answers[slug].push(newAnswer);
     }
   };
 })
@@ -144,7 +145,7 @@ angular.module('questions', ['ui.router', 'firebase'])
 })
 .controller('QuestionCtrl', function($scope, Question, Answer, $state, $rootScope){
   $scope.slug = $state.params.slug;
-  $scope.answers = Answer.getAll();
+  $scope.answers = Answer.getAll($scope.slug);
   Question.getOne($state.params.slug)
     .success(function(data) {
       $scope.question = data;
@@ -153,7 +154,7 @@ angular.module('questions', ['ui.router', 'firebase'])
       $state.go('404');
   });
   $scope.addAnswer = function() {
-    Answer.addAnswer($scope.answer);
+    Answer.addAnswer($scope.answer, $scope.slug);
     $scope.answer = {};
   };
   $scope.isUser = function(question) {
