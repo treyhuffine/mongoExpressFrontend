@@ -13,7 +13,7 @@
   <body ng-controller='MainCtrl'>
 
     <div class='container'>
-      <nav class="navbar navbar-inverse">
+      <nav class="navbar navbar-inverse" ng-contoller="LoginCtrl">
         <div class="container-fluid">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -30,6 +30,7 @@
               <li>
                 <div class="navbar-text"></div>
               </li>
+              <li><form><a href="#" class="btn btn-default navbar-btn btn-sm" data-toggle="modal" data-target="#login-modal">Login</a></form></li>
               <li><form><a href="#" class="btn btn-primary navbar-btn btn-sm" ui-sref="new">Ask Question</a></form></li>
             </ul>
           </div>
@@ -40,9 +41,41 @@
 
     </div>
 
+    <div class="modal fade" id="login-modal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Login</h4>
+          </div>
+          <form class="form-horizontal" accept-charset="UTF-8" method="post" ng-submit="loginUser()">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+                <div class="col-sm-10">
+                  <input type="email" ng-model="user.email" value="" class="form-control" id="inputEmail" placeholder="Email" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputQuestion" class="col-sm-2 control-label">Password</label>
+                <div class="col-sm-10">
+                  <input class="form-control" type="password" ng-model="user.password" id="inputQuestion" placeholder="Password" required></input>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/bower_components/angular/angular.js"></script>
+    <script src="/bower_components/firebase/firebase.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
     <script src="script.js"></script>

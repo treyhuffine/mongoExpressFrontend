@@ -1,6 +1,8 @@
 angular.module('questions', ['ui.router'])
+.run()
 .constant("ATN", {
-  "API_URL": "https://mongoexoress.herokuapp.com"
+  "API_URL": "http://localhost:3000"
+  // "API_URL": "https://mongoexoress.herokuapp.com/"
 })
 .config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise("/");
@@ -43,6 +45,9 @@ angular.module('questions', ['ui.router'])
   return function(input) {
     return moment(input).utc().fromNow();
   };
+})
+.controller('LoginCtrl', function($scope, $state) {
+
 })
 .controller('AskCtrl', function($scope, Question, $state) {
   $scope.askQuestion = function() {

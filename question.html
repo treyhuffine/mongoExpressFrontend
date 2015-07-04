@@ -5,6 +5,7 @@
     </a>
   </div>
   <div class="media-body">
+    <div class="hidden-xs"><a ui-sref="home" class="btn btn-primary btn-lg pull-right">back</a></div>
     <h4 class="media-heading">{{question.email}} asked:</h4>
     <div class="time hidden-xs">{{ question.createdAt | dateInWords }}</div>
     <div>{{question.body}}</div>
