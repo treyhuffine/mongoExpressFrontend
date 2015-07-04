@@ -68,7 +68,6 @@ angular.module('questions', ['ui.router', 'firebase'])
       $rootScope.currentUser.email = authData.password.email;
     }
   });
-  $scope.$checkAuth
   $scope.registerUser = function() {
     console.log($scope.user);
     $rootScope.afAuth.$createUser({
