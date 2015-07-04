@@ -167,11 +167,11 @@ angular.module('questions', ['ui.router', 'firebase'])
       return false;
     }
   };
-  $scope.deleteQuestion = function(delQ) {
-    console.log(delQ.slug);
-    Question.deleteQuestion(delQ.slug)
+  $scope.deleteQuestion = function() {  
+    Question.deleteQuestion($scope.question.slug)
       .success(function(data) {
         console.log(data);
+        $state.go('home');
       })
       .catch(function(err) {
         console.error(err);
