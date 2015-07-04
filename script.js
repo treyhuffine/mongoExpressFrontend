@@ -57,9 +57,72 @@ angular.module('questions', ['ui.router', 'firebase'])
     return moment(input).utc().fromNow();
   };
 })
-.controller('LoginCtrl', function($scope, $state) {
-  $scope.registerUser(function() {});
-  $scope.loginUser(function() {});
+.controller('LoginCtrl', function($scope, $rootScope) {
+  var $checkAuth = $rootScope.afAuth.$onAuth(function(authData) {
+    console.log(authData);
+    if (authData) {
+      $rootScope.currentUser = {};
+      $rootScope.currentUser.userToken = authData.uid;
+      $rootScope.currentUser.email = $rootScope.fbRef.child("users").child($rootScope.currentUser.userToken.uid).email;
+      return true;
+    } else {
+      return false;
+    }
+  });
+  $checkAuth();
+  $scope.registerUser = function() {
+    console.log($scope.user);
+    $rootScope.afAuth.$createUser({
+      email: $scope.user.email,
+      password: $scope.user.password
+    },
+    function(error, userData) {
+      if (error) {
+        switch (error.code) {
+          case "EMAIL_TAKEN":
+            alert("The new user account cannot be created because the email is already in use.");
+            break;
+          case "INVALID_EMAIL":
+            alert("The specified email is not a valid email.");
+            break;
+          default:
+            alert("Error creating user:", error);
+        }
+      } else {
+        alert("Register Successful - Please login");
+      }
+    })
+    .then(function(currentData) {
+      var newData;
+      newData = currentData;
+      if (newData.uid) {
+        $rootScope.fbRef.child("users").child(newData.uid).set({
+          email: $scope.user.email
+        });
+        return true;
+      }
+      return false;
+    })
+    .then(function(userData) {
+      $("#signup-modal").modal("hide");
+      console.log("create", userData);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  };
+  $scope.loginUser = function() {
+    $rootScope.afAuth.$authWithPassword({
+      email: $scope.user.email,
+      password: $scope.user.password
+    })
+    .catch(function(error) {
+      alert(error);
+    });
+  };
+  $scope.logout = function() {
+    $rootScope.afAuth.$unauth();
+  };
 })
 .controller('AskCtrl', function($scope, Question, $state) {
   $scope.askQuestion = function() {
@@ -84,6 +147,7 @@ angular.module('questions', ['ui.router', 'firebase'])
     });
 })
 .controller('MainCtrl', function($scope, Question){
+  console.log('main');
   Question.getAll().success(function(data) {
     $scope.questions = data;
   }).catch(function(err) {
