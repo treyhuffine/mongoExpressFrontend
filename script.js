@@ -163,7 +163,7 @@ angular.module('questions', ['ui.router', 'firebase'])
       });
   };
 })
-.controller('MainCtrl', function($scope, Question, $rootScope){
+.controller('MainCtrl', function($scope, Question, $rootScope, $state){
   Question.getAll().success(function(data) {
     $scope.questions = data;
   }).catch(function(err) {
@@ -178,12 +178,13 @@ angular.module('questions', ['ui.router', 'firebase'])
     }
   };
   $scope.editQuestion = function() {};
-  $scope.deleteQuestion = function(delQ) {
+  $scope.deleteQuestion = function(delQ, idx) {
     console.log(delQ.slug);
     if ($scope.isUser(delQ)) {
       Question.deleteQuestion(delQ.slug)
         .success(function(data) {
-          console.log(data);
+          $scope.questions.splice(idx, 1);
+          $state.go('home');
         })
         .catch(function(err) {
           console.error(err);
