@@ -57,13 +57,8 @@ angular.module('questions', ['ui.router', 'firebase'])
 .factory('Answer', function($http, ATN) {
   var answers = {};
   return {
-    getAll: function(slug) {
-      answers[slug] = answers[slug] || [];
-      return answers[slug];
-    },
     addAnswer: function(newAnswer, slug) {
-      // return $http.post(ATN.API_URL + "/questions", newQuestion);
-      answers[slug].push(newAnswer);
+      return $http.post(ATN.API_URL + "/questions/" + slug + "/answers", newAnswer);
     }
   };
 })
@@ -133,8 +128,8 @@ angular.module('questions', ['ui.router', 'firebase'])
   $scope.askQuestion = function() {
     Question.addQuestion({
       email: $rootScope.currentUser.email,
-      body: $scope.body,
-      uid: $rootScope.currentUser.userToken})
+      body: $scope.body
+      })
     .success(function(data) {
       $state.go("home");
     })
@@ -145,7 +140,7 @@ angular.module('questions', ['ui.router', 'firebase'])
 })
 .controller('QuestionCtrl', function($scope, Question, Answer, $state, $rootScope){
   $scope.slug = $state.params.slug;
-  $scope.answers = Answer.getAll($scope.slug);
+
   Question.getOne($state.params.slug)
     .success(function(data) {
       $scope.question = data;
@@ -154,8 +149,15 @@ angular.module('questions', ['ui.router', 'firebase'])
       $state.go('404');
   });
   $scope.addAnswer = function() {
-    Answer.addAnswer($scope.answer, $scope.slug);
-    $scope.answer = {};
+    $scope.answer.email = $rootScope.currentUser.email;
+    Answer.addAnswer($scope.answer, $scope.slug)
+      .success(function(data) {
+        $scope.question = data;
+        $scope.answer = {};
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
   };
   $scope.isUser = function(question) {
     if ($rootScope.currentUser && question) {
