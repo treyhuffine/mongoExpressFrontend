@@ -32,6 +32,11 @@ angular.module('questions', ['ui.router', 'firebase'])
       templateUrl: "ask.html",
       controller: "AskCtrl"
     })
+    .state('edit', {
+      url: "/edit/:slug",
+      templateUrl: "edit.html",
+      controller: "EditCtrl"
+    })
     .state('question', {
       url: "/:slug",
       templateUrl: "question.html",
@@ -138,6 +143,18 @@ angular.module('questions', ['ui.router', 'firebase'])
     });
   };
 })
+.controller('EditCtrl', function($scope, Question, $state, $rootScope) {
+  Question.getOne($state.params.slug)
+    .success(function(data) {
+      $scope.question = data;
+    }).catch(function(err) {
+      console.error(err);
+      $state.go('404');
+  });
+  $scope.editQuestion = function() {
+    console.log("edit ish");
+  }
+})
 .controller('QuestionCtrl', function($scope, Question, Answer, $state, $rootScope){
   $scope.slug = $state.params.slug;
 
@@ -167,7 +184,7 @@ angular.module('questions', ['ui.router', 'firebase'])
       return false;
     }
   };
-  $scope.deleteQuestion = function() {  
+  $scope.deleteQuestion = function() {
     Question.deleteQuestion($scope.question.slug)
       .success(function(data) {
         console.log(data);
@@ -192,7 +209,6 @@ angular.module('questions', ['ui.router', 'firebase'])
       return false;
     }
   };
-  $scope.editQuestion = function() {};
   $scope.deleteQuestion = function(delQ, idx) {
     console.log(delQ.slug);
     if ($scope.isUser(delQ)) {

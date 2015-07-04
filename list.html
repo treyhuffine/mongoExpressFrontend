@@ -12,7 +12,7 @@
     </div>
     <div class="media-body">
       <div class="hidden-xs"><a class="btn btn-danger btn-xs pull-right" ng-show="isUser(question)" ng-click="deleteQuestion(question, index)">Delete</a></div>
-      <div class="hidden-xs"><a class="btn btn-warning btn-xs pull-right" ng-show="isUser(question)" ng-click="editQuestion(question, index)">Edit</a></div>
+      <div class="hidden-xs"><a class="btn btn-warning btn-xs pull-right" ng-show="isUser(question)" ui-sref="edit({slug: question.slug})">Edit</a></div>
       <h4 class="media-heading">{{question.email}} asked:</h4>
       <div class="time hidden-xs">{{ question.createdAt | dateInWords }}</div>
       <div>{{question.body}}</div>
