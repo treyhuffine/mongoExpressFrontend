@@ -55,7 +55,7 @@
     </div>
     <div class="media-body">
       <h4 class="media-heading">{{answer.email}} answered:</h4>
-      <div class="time hidden-xs">time....</div>
+      <div class="time hidden-xs">{{ answer.createdAt | dateInWords }}</div>
       <div>{{answer.body}}</div>
     </div>
   </div>
