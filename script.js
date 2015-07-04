@@ -28,12 +28,12 @@ angular.module('questions', ['ui.router'])
     addQuestion: function(newQuestion) {
       return $http.post(ATN.API_URL + "/questions", newQuestion);
     }
-  }
+  };
 })
 .filter("dateInWords", function() {
   return function(input) {
     return moment(input).utc().fromNow();
-  }
+  };
 })
 .controller('QuestionCtrl', function($scope, Question, $state){
   $scope.slug = $state.params.slug;
@@ -61,7 +61,7 @@ angular.module('questions', ['ui.router'])
       })
       .catch(function(err) {
         console.error(err);
-      })
+      });
   };
 
 });
