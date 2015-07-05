@@ -54,8 +54,12 @@ angular.module('questions', ['ui.router', 'firebase'])
     addQuestion: function(newQuestion) {
       return $http.post(ATN.API_URL + "/questions", newQuestion);
     },
-    deleteQuestion: function(delQ) {
-      return $http.delete(ATN.API_URL + "/questions/" + delQ);
+    deleteQuestion: function(deleteSlug) {
+      return $http.delete(ATN.API_URL + "/questions/" + deleteSlug);
+    },
+    editQuestion: function(editSlug, editQuestion) {
+      console.log(editQuestion);
+      return $http.patch(ATN.API_URL + "/questions/" + editSlug, {body: editQuestion});
     }
   };
 })
@@ -152,8 +156,15 @@ angular.module('questions', ['ui.router', 'firebase'])
       $state.go('404');
   });
   $scope.editQuestion = function() {
-    console.log("edit ish");
-  }
+    Question.editQuestion($scope.question.slug, $scope.question.body)
+      .success(function(data) {
+        console.log("Update successful");
+        $state.go('home');
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+  };
 })
 .controller('QuestionCtrl', function($scope, Question, Answer, $state, $rootScope){
   $scope.slug = $state.params.slug;
